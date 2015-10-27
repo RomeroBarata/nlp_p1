@@ -5,6 +5,10 @@ from nltk.corpus import reuters
 necessary_documents_fileids = reuters.fileids(['earn', 'acquisitions', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'ship', 'wheat', 'corn'])
 
 # Split into training and testing.
+training_fileids = [w for w in necessary_documents_fileids if w.startswith('training')]
+testing_fileids = [w for w in necessary_documents_fileids if w.startswith('test')]
+
+# Extract features.
 
 # Train a classifier.
 

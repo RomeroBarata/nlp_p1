@@ -1,6 +1,7 @@
 from nltk.corpus import reuters
 from feature_extractors.feature_extraction import *
 from classifiers.logistic_regression import *
+from assessment.assessment_metrics import *
 
 # Constants
 NUM_MOST_FREQUENT = 700

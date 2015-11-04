@@ -19,9 +19,9 @@ def cost_function(training, classes):
 
     j_1 = np.dot(np.transpose(classes), math.log(hypothesis))
     j_2 = np.dot(np.transpose(np.subtract(1,classes)), math.log(np.subtract(1,hypothesis)))
-    J = np.multiply(1/m, np.multiply(-1,np.add(j_1, j_2)))
+    J = (1/m) * (-1) * (np.add(j_1, j_2))
 
-    gradient = np.multiply(1/m, np.dot(np.traspose(np.subtract(hypothesis,classes)),training))
+    gradient = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training)
 
     return (J, gradient)
 
@@ -41,12 +41,12 @@ def cost_function_reg(training, classes, regLambda):
 
     j_1 = np.dot(np.transpose(classes), math.log(hypothesis))
     j_2 = np.dot(np.transpose(np.subtract(1,classes)), math.log(np.subtract(1,hypothesis)))
-    j_3 = np.multiply(regLambda/2*m,np.sum(theta2**2))
-    J = np.multiply(1/m, np.multiply(-1,np.add(j_1, j_2))) + j_3
+    j_3 = (regLambda/2*m) * np.sum(theta2**2)
+    J = (1/m) * (-1) * np.add(j_1, j_2)) + j_3
 
-    gradient_1 = np.multiply(1/m, np.dot(np.traspose(np.subtract(hypothesis,classes)),training))
-    gradient_2 = np.multiply(regLambda/m, theta)
+    gradient_1 = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training)
+    gradient_2 = (regLambda/m) * theta
     gradient = np.transpose(gradient_1) + gradient_2
-    gradient[0] = np.multiply(1/m, np.dot(np.traspose(np.subtract(hypothesis,classes)),training[:0]))
+    gradient[0] = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training[:0])
 
     return (J, gradient)

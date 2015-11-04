@@ -7,13 +7,11 @@ def sigmoid(x):
 vsigmoid = np.vectorize(sigmoid)
 
 # Returns the cost J and the gradient vector
-def cost_function(training, classes):
+def cost_function(training, classes, theta):
     m = classes.size
 
     # add the bias unit to the training set
     training = np.concatenate(np.ones((training.shape[0],1)),training, axis=1)
-
-    theta = np.zeros((training.shape[1],1))
 
     hypothesis = vsigmoid(np.dot(training,theta))
 
@@ -26,16 +24,14 @@ def cost_function(training, classes):
     return (J, gradient)
 
 
-def cost_function_reg(training, classes, regLambda):
+def cost_function_reg(training, classes, regLambda, theta):
     m = classes.size
-
-    # theta2 excludes the first parameter in orther to be reguarized
-    theta2 = np.zeros((training.shape[1],1))
 
     # add the bias unit to the training set
     training = np.concatenate(np.ones((training.shape[0],1)),training, axis=1)
 
-    theta = np.zeros((training.shape[1],1))
+    # theta2 excludes the first parameter in orther to be reguarized
+    theta2 = theta[range(1,theta.size)]
 
     hypothesis = vsigmoid(np.dot(training,theta))
 
@@ -47,6 +43,7 @@ def cost_function_reg(training, classes, regLambda):
     gradient_1 = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training)
     gradient_2 = (regLambda/m) * theta
     gradient = np.transpose(gradient_1) + gradient_2
-    gradient[0] = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training[:0])
+    gradient[0] = (1/m) * np.dot(np.traspose(np.subtract(hypothesis,classes)),training[:,0])
 
     return (J, gradient)
+

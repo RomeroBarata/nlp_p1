@@ -4,6 +4,8 @@ import numpy as np
 def sigmoid(x):
     return 1 / (1 + math.exp(-x))
 
+vsigmoid = np.vectorize(sigmoid)
+
 # Returns the cost J and the gradient vector
 def cost_function(training, classes):
     m = classes.size
@@ -13,7 +15,7 @@ def cost_function(training, classes):
 
     theta = np.zeros((training.shape[1],1))
 
-    hypothesis = sigmoid(np.dot(training,theta))
+    hypothesis = vsigmoid(np.dot(training,theta))
 
     j_1 = np.dot(np.transpose(classes), math.log(hypothesis))
     j_2 = np.dot(np.transpose(np.subtract(1,classes)), math.log(np.subtract(1,hypothesis)))
@@ -24,7 +26,7 @@ def cost_function(training, classes):
     return (J, gradient)
 
 
-def cost_function_reg(training, classes, lambda):
+def cost_function_reg(training, classes, regLambda):
     m = classes.size
 
     # theta2 excludes the first parameter in orther to be reguarized
@@ -35,15 +37,15 @@ def cost_function_reg(training, classes, lambda):
 
     theta = np.zeros((training.shape[1],1))
 
-    hypothesis = sigmoid(np.dot(training,theta))
+    hypothesis = vsigmoid(np.dot(training,theta))
 
     j_1 = np.dot(np.transpose(classes), math.log(hypothesis))
     j_2 = np.dot(np.transpose(np.subtract(1,classes)), math.log(np.subtract(1,hypothesis)))
-    j_3 = np.multiply(lambda/2*m,np.sum(theta2**2))
+    j_3 = np.multiply(regLambda/2*m,np.sum(theta2**2))
     J = np.multiply(1/m, np.multiply(-1,np.add(j_1, j_2))) + j_3
 
     gradient_1 = np.multiply(1/m, np.dot(np.traspose(np.subtract(hypothesis,classes)),training))
-    gradient_2 = np.multiply(lambda/m, theta)
+    gradient_2 = np.multiply(regLambda/m, theta)
     gradient = np.transpose(gradient_1) + gradient_2
     gradient[0] = np.multiply(1/m, np.dot(np.traspose(np.subtract(hypothesis,classes)),training[:0]))
 

@@ -17,6 +17,5 @@ training_featureset = [(document_features(reuters.words(fileid), most_frequent_w
 testing_featureset = [(document_features(reuters.words(fileid), most_frequent_words), reuters.categories(fileid)) for fileid in testing_fileids]
 
 # Train a classifier.
-# add the bias unit to the training set
 
 # Assess the results.

@@ -1,13 +1,14 @@
 from nltk.corpus import reuters
 from feature_extractors.feature_extraction import *
 from classifiers.logistic_regression import *
+from assessment.assessment_metrics import *
 
 # Constants
-NUM_MOST_FREQUENT = 200
-TOP_CLASSES = ['earn', 'acquisitions', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'ship', 'wheat', 'corn']
+NUM_MOST_FREQUENT = 700
+CATEGORIES = ['earn', 'acquisitions', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'ship', 'wheat', 'corn']
 
 # Extract the fileids of the necessary subset of documents.
-necessary_documents_fileids = reuters.fileids(TOP_CLASSES)
+necessary_documents_fileids = reuters.fileids(CATEGORIES)
 
 # Split into training and testing.
 training_fileids = [w for w in necessary_documents_fileids if w.startswith('training')]

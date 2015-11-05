@@ -38,7 +38,6 @@ def gradient_descent(training, classes, theta, alpha, num_iterations):
     m = len(classes)
 
     for i in range(0,num_iterations):
-        print (i)
 
         hypothesis = vsigmoid(np.dot(training,theta))
         

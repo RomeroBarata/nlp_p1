@@ -5,7 +5,6 @@ def sigmoid(x):
 
 vsigmoid = np.vectorize(sigmoid)
 
-# Returns the cost J and the gradient vector
 def cost_function(training, classes, theta):
     m = len(classes)
 
@@ -63,4 +62,15 @@ def gradient_descent_reg(training, classes, theta, alpha, num_iterations, regLam
         theta = np.subtract(theta, np.transpose(np.multiply(alpha, gradient)))
 
     return theta
+
+def classify(testing, theta, threshold, interest_category):
+    result = np.dot(testing, theta)
+    predicted_class = []
+    for i in range(len(result)):
+        if result[i] >= threshold:
+            predicted_class.append(interest_category)
+        else:
+            predicted_class.append("not_" + interest_category)
+
+    return predicted_class
 

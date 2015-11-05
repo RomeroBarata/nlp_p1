@@ -26,24 +26,30 @@ training_featureset = [(document_features(reuters.words(fileid), most_frequent_w
 testing_featureset = [(document_features(reuters.words(fileid), most_frequent_words), reuters.categories(fileid)) for fileid in testing_fileids]
 
 ## Train a classifier ##
+
+# Create a matrix with the values of the features to send to the classifier
 training_matrix = np.array([list(x.values()) for x, y in training_featureset])
+# Create a matrix with only the classes labels of each document
 classes_vector = [y for x, y in training_featureset]
-n = training_matrix.shape[1]
-m = len(training_matrix)
+n = training_matrix.shape[1] # number of features
+m = len(training_matrix) # number of training documents
 # add the bias unit to the training matrix
 training_matrix = np.concatenate((np.ones((m,1)), training_matrix), axis = 1)
 
 # creating ten classifiers
 classifiers = dict( (c, np.zeros((n+1,1)) ) for c in CATEGORIES )
 
+# training the ten classifiers
 for c in CATEGORIES:
     print ("Training Class: " + c)
+    # map the classes vector to a vetor of 1s and 0s (1 if the class is equal to c)
     mapClasses = [[1] if c in cl else [0] for cl in classes_vector]
     mapClasses = np.array(mapClasses)
 
     cost = cost_function(training_matrix, mapClasses, classifiers[c])
     print ("Initial Cost: " + str(cost))
 
+    # update the parameter in order to minimize the cost
     classifiers[c] = gradient_descent(training_matrix, mapClasses, classifiers[c], ALPHA, ITERATIONS)
     
     cost = cost_function(training_matrix, mapClasses, classifiers[c])

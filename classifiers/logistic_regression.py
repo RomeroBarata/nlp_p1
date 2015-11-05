@@ -5,6 +5,11 @@ def sigmoid(x):
 
 vsigmoid = np.vectorize(sigmoid)
 
+# The cost function is in the form: 
+# J = class * log(hypothesis) + (1-class) * log(1 - hypothesis)
+# If the class is 1 the cost will be given by log(hypothesis), so the cost will be close to 0 if the 
+# hypothesis is close to 1 and close to infinite if hypothesis is too far from 1. When class is 0, 
+# the cost will be log(1-hypothesis), then the cost will be low when hypothesis approaches 0.
 def cost_function(training, classes, theta):
     m = len(classes)
 
@@ -16,11 +21,12 @@ def cost_function(training, classes, theta):
     
     return J
 
-
+# The regularized cost funtion adds a regularization term lambda to the previous cost function 
+# in order to avoid overfitting
 def cost_function_reg(training, classes, regLambda, theta):
     m = len(classes)
 
-    # theta2 excludes the first parameter in orther to be reguarized
+    # theta2 excludes the first parameter in orther to be regularized
     theta2 = theta[range(1,theta.size)]
 
     hypothesis = vsigmoid(np.dot(training,theta))
@@ -32,7 +38,8 @@ def cost_function_reg(training, classes, regLambda, theta):
 
     return J
 
-
+# gradient_descent updates the value of theta by subtracting a gradient of the cost from the 
+# previous value of theta 
 def gradient_descent(training, classes, theta, alpha, num_iterations):
     m = len(classes)
 
@@ -46,7 +53,7 @@ def gradient_descent(training, classes, theta, alpha, num_iterations):
 
     return theta
 
-
+# Regularized gradient descent
 def gradient_descent_reg(training, classes, theta, alpha, num_iterations, regLambda):
     m = len(classes)
 

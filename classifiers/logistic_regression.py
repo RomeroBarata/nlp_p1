@@ -23,7 +23,7 @@ def cost_function(training, classes, theta):
 
 # The regularized cost funtion adds a regularization term lambda to the previous cost function 
 # in order to avoid overfitting
-def cost_function_reg(training, classes, regLambda, theta):
+def cost_function_reg(training, classes, theta, regLambda):
     m = len(classes)
 
     # theta2 excludes the first parameter in orther to be regularized
@@ -64,9 +64,9 @@ def gradient_descent_reg(training, classes, theta, alpha, num_iterations, regLam
         gradient_1 = np.multiply(1/m, np.dot(np.transpose(np.subtract(hypothesis, classes)),training))
         gradient_2 = np.multiply((regLambda/m), theta)
         gradient = np.transpose(gradient_1) + gradient_2
-        gradient[0] = (1/m) * np.dot(np.traspose(hypothesis - classes),training[:,0])
+        gradient[0] = (1/m) * np.dot(np.transpose(np.subtract(hypothesis, classes)),np.array(training[:,0]))
 
-        theta = np.subtract(theta, np.transpose(np.multiply(alpha, gradient)))
+        theta = np.subtract(theta, np.multiply(alpha, gradient))
 
     return theta
 

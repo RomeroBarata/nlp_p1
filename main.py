@@ -21,4 +21,33 @@ testing_featureset = [(document_features(reuters.words(fileid), most_frequent_wo
 
 # Train a classifier.
 
+# training_matrix = [x.values() for (x,y) in training_featureset]
+training_matrix = np.array([list(x.values()) for (x,y) in training_featureset])
+classes_vector = [y for (x,y) in training_featureset]
+n = NUM_MOST_FREQUENT
+m = len(training_matrix)
+# add the bias unit to the training matrix
+training_matrix = np.concatenate((np.ones((m,1)) , training_matrix) , axis=1)
+
+# creating ten classifiers
+classifiers = dict( (c, np.zeros((n+1,1)) ) for c in TOP_CLASSES )
+
+# regLambda = 1
+
+iterations = 100
+alpha = 0.1
+
+for c in TOP_CLASSES:
+    print ("training class "+c)
+    mapClasses = [[1] if c in cl else [0] for cl in classes_vector]
+    mapClasses = np.array(mapClasses)
+
+    cost = cost_function(training_matrix, mapClasses, classifiers[c])
+    print ("initial cost: "+str(cost))
+
+    classifiers[c] = gradient_descent(training_matrix, mapClasses, classifiers[c], alpha, iterations)
+    
+    cost = cost_function(training_matrix, mapClasses, classifiers[c])
+    print ("trained cost: "+str(cost))
+
 # Assess the results.

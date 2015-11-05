@@ -1,13 +1,22 @@
 def precision(true_positive, false_positive):
-    return true_positive / (true_positive + false_positive)
+    if (true_positive + false_positive) != 0:
+        return true_positive / (true_positive + false_positive)
+    else:
+        return 0
 
 def recall(true_positive, false_negative):
-    return true_positive / (true_positive + false_negative)
+    if (true_positive + false_negative) != 0:
+        return true_positive / (true_positive + false_negative)
+    else:
+        return 0
 
 def f1(true_positive, false_positive, false_negative):
     prec = precision(true_positive, false_positive)
     rec = recall(true_positive, false_negative)
-    return (2 * prec * rec) / (prec + rec)
+    if (prec + rec) != 0:
+        return (2 * prec * rec) / (prec + rec)
+    else:
+        return 0
 
 def accuracy(true_positive, true_negative, false_positive, false_negative):
     return (true_positive + true_negative) / (true_positive + true_negative + false_positive + false_negative)
@@ -25,22 +34,28 @@ def compute_metrics(true_classes, predicted_class, interest_category):
             fn += 1
 
     return {'Precision': precision(tp, fp), 'Recall': recall(tp, fn), 'F1': f1(tp, fp, fn), 'Accuracy': accuracy(tp, tn, fp, fn),
-            'TP': tp, 'TN': tn, 'FP': fp, 'FN': fn}
+            'TP': tp, 'TN': tn, 'FP': fp, 'FN': fn, 'Category': interest_category}
 
 def macro_average(performances):
     '''performances: A list of dictionaries where each dictionary contains
                      the performance metrics computed by the function compute_metrics for each trained classifier.
     '''
     num_classifiers = len(performances)
-    macro_precision = macro_recall = macro_accuracy = macro_f1 = 0
+    macro_precision = macro_recall = macro_accuracy = macro_f1 = macro_tp = macro_tn = macro_fp = macro_fn = 0
     for i in range(num_classifiers):
         macro_precision += performances[i]['Precision']
         macro_recall += performances[i]['Recall']
-        macro_accuracy += performance[i]['Accuracy']
+        macro_accuracy += performances[i]['Accuracy']
         macro_f1 += performances[i]['F1']
+        macro_tp += performances[i]['TP']
+        macro_tn += performances[i]['TN']
+        macro_fp += performances[i]['FP']
+        macro_fn += performances[i]['FN']
 
     return {'Macro Precision': macro_precision / num_classifiers, 'Macro Recall': macro_recall / num_classifiers,
-            'Macro Accuracy': macro_accuracy / num_classifiers, 'Macro F1': macro_f1 / num_classifiers}
+            'Macro Accuracy': macro_accuracy / num_classifiers, 'Macro F1': macro_f1 / num_classifiers,
+            'Macro TP': macro_tp / num_classifiers, 'Macro TN': macro_tn / num_classifiers,
+            'Macro FP': macro_fp / num_classifiers, 'Macro FN': macro_fn / num_classifiers}
 
 def micro_average(performances):
     '''performances: A list of dictionaries where each dictionary contains

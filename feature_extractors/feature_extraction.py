@@ -14,6 +14,12 @@ MOST_COMMON_WORDS_ENGLISH = ['the', 'be', 'am', 'are', 'is', 'was', 'were', 'bee
                              'give', 'day', 'most', 'us']
 
 def extract_most_frequent_words(fileids, num_most_frequent):
+    ''' Function to extract the most frequent words from a corpus.
+        Args:
+              fileids: file ids for the documents in the reuters corpus.
+              num_most_frequent: Number of most frequent words the user
+                                 wish to compute.
+    '''
     fdist = FreqDist()
     for fileid in fileids:
         for word in reuters.words(fileid):
@@ -26,6 +32,11 @@ def extract_most_frequent_words(fileids, num_most_frequent):
 
     
 def document_features(document, most_frequent_words):
+    ''' Function to extract the features from a document.
+        Args:
+              document: A list of words describing the document.
+              most_frequent_words: A list of the most frequent words (the features).
+    '''
     features = {}
     for word in most_frequent_words:
         features.setdefault(word, 0)

@@ -6,9 +6,9 @@ import pprint
 
 ## Constants ##
 NUM_MOST_FREQUENT = 700
-CATEGORIES = ['earn', 'acquisitions', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'ship', 'wheat', 'corn']
+CATEGORIES = ['earn', 'acq', 'money-fx', 'grain', 'crude', 'trade', 'interest', 'ship', 'wheat', 'corn']
 # Logistic Regression parameters
-ITERATIONS = 150
+ITERATIONS = 800
 ALPHA = 0.1
 THRESHOLD = 0.5
 #LAMBDA = 1
@@ -26,30 +26,29 @@ training_featureset = [(document_features(reuters.words(fileid), most_frequent_w
 testing_featureset = [(document_features(reuters.words(fileid), most_frequent_words), reuters.categories(fileid)) for fileid in testing_fileids]
 
 ## Train a classifier ##
-
 # Create a matrix with the values of the features to send to the classifier
 training_matrix = np.array([list(x.values()) for x, y in training_featureset])
 # Create a matrix with only the classes labels of each document
 classes_vector = [y for x, y in training_featureset]
-n = training_matrix.shape[1] # number of features
-m = len(training_matrix) # number of training documents
-# add the bias unit to the training matrix
+n = training_matrix.shape[1] # Number of features
+m = len(training_matrix) # Number of training documents
+# Add the bias term to the training matrix
 training_matrix = np.concatenate((np.ones((m,1)), training_matrix), axis = 1)
 
-# creating ten classifiers
+# Create ten classifiers
 classifiers = dict( (c, np.zeros((n+1,1)) ) for c in CATEGORIES )
 
-# training the ten classifiers
+# Train the ten classifiers
 for c in CATEGORIES:
     print ("Training Class: " + c)
-    # map the classes vector to a vetor of 1s and 0s (1 if the class is equal to c)
+    # Map the classes_vector to a vector of 1s and 0s (1 if the class is equal to c)
     mapClasses = [[1] if c in cl else [0] for cl in classes_vector]
     mapClasses = np.array(mapClasses)
 
     cost = cost_function(training_matrix, mapClasses, classifiers[c])
     print ("Initial Cost: " + str(cost))
 
-    # update the parameter in order to minimize the cost
+    # Update theta in order to minimize the cost
     classifiers[c] = gradient_descent(training_matrix, mapClasses, classifiers[c], ALPHA, ITERATIONS)
     
     cost = cost_function(training_matrix, mapClasses, classifiers[c])

@@ -22,6 +22,16 @@ def accuracy(true_positive, true_negative, false_positive, false_negative):
     return (true_positive + true_negative) / (true_positive + true_negative + false_positive + false_negative)
 
 def compute_metrics(true_classes, predicted_class, interest_category):
+    ''' Function to compute assessment metrics. These include: precision, recall, 
+        f1, accuracy, true positive, true negative, false positive, false negative, and
+        also it returns the name of the class of interest as well.
+        Args:
+              true_classes: A list of lists where each list contains the classes of
+                            individual documents.
+              predicted_class: A list of predictions made by a single classifier.
+              interest_category: The concept of interest of the classifier which made
+                                 the predictions.
+    '''
     tp = tn = fp = fn = 0
     for i in range(len(predicted_class)):
         if predicted_class[i] in true_classes[i]:
@@ -37,8 +47,10 @@ def compute_metrics(true_classes, predicted_class, interest_category):
             'TP': tp, 'TN': tn, 'FP': fp, 'FN': fn, 'Category': interest_category}
 
 def macro_average(performances):
-    '''performances: A list of dictionaries where each dictionary contains
-                     the performance metrics computed by the function compute_metrics for each trained classifier.
+    ''' Function to compute the macro metrics.
+        Args:
+             performances: A list of dictionaries where each dictionary contains
+                           the performance metrics computed by the function compute_metrics for each trained classifier.
     '''
     num_classifiers = len(performances)
     macro_precision = macro_recall = macro_accuracy = macro_f1 = macro_tp = macro_tn = macro_fp = macro_fn = 0
@@ -58,8 +70,10 @@ def macro_average(performances):
             'Macro FP': macro_fp / num_classifiers, 'Macro FN': macro_fn / num_classifiers}
 
 def micro_average(performances):
-    '''performances: A list of dictionaries where each dictionary contains
-                     the performance metrics computed by the function compute_metrics for each trained classifier.
+    ''' Function to compute the micro metrics.
+        Args:
+             performances: A list of dictionaries where each dictionary contains
+                           the performance metrics computed by the function compute_metrics for each trained classifier.
     '''
     tp = tn = fp = fn = 0
     for i in range(len(performances)):
